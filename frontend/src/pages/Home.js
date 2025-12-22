@@ -1,21 +1,36 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import "../styles/home.css";
+import bgVideo from "../Assets/bg-video.mp4"; // ✅ REQUIRED
 
 export default function Home() {
   const navigate = useNavigate();
 
   return (
     <div className="home">
-      <h1>✈️ Book Flights Easily</h1>
-      <p>Fast • Secure • Smart Pricing</p>
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+      >
+        <source src={bgVideo} type="video/mp4" />
+      </video>
 
-      <button className="primary-btn" onClick={() => navigate("/search")}>
-        Search Flights
-      </button>
+      <div className="home-overlay">
+        <h1> Smart Flight Booking</h1>
+        <p>Dynamic pricing • Secure booking • Instant tickets</p>
 
-      <button className="secondary-btn" onClick={() => navigate("/history")}>
-        View Booking History
-      </button>
+        <div className="home-buttons">
+          <button onClick={() => navigate("/search")}>
+            Search Flights
+          </button>
+          <button onClick={() => navigate("/history")}>
+            Booking History
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

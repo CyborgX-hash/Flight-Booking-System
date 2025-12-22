@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { WalletContext } from "../components/WalletContext";
+import "../styles/search.css";
 
 const API = "http://localhost:5001";
 
