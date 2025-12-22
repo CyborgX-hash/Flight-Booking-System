@@ -6,8 +6,24 @@ exports.searchFlights = async (req, res) => {
 
     const flights = await prisma.flight.findMany({
       where: {
-        ...(from && { departure_city: from }),
-        ...(to && { arrival_city: to }),
+        AND: [
+          from
+            ? {
+                departure_city: {
+                  equals: from,
+                  mode: "insensitive", // ✅ CASE-INSENSITIVE
+                },
+              }
+            : {},
+          to
+            ? {
+                arrival_city: {
+                  equals: to,
+                  mode: "insensitive", // ✅ CASE-INSENSITIVE
+                },
+              }
+            : {},
+        ],
       },
       take: 10,
     });
@@ -18,7 +34,7 @@ exports.searchFlights = async (req, res) => {
       flights,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Search Flights Error:", error);
     res.status(500).json({ error: "Failed to fetch flights" });
   }
 };

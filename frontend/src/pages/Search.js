@@ -6,6 +6,7 @@ const API = "http://localhost:5001";
 
 export default function Search() {
   const [flights, setFlights] = useState([]);
+  const [filteredFlights, setFilteredFlights] = useState([]);
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [sort, setSort] = useState(""); // "", "low", "high"
@@ -13,45 +14,48 @@ export default function Search() {
 
   const { deduct } = useContext(WalletContext);
 
-  // Fetch flights from backend
+  /* ---------------- FETCH FLIGHTS ---------------- */
   const fetchFlights = async () => {
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    let url = `${API}/flights`;
-    if (from || to) {
-      url += `?from=${from}&to=${to}`;
+      let url = `${API}/flights`;
+      if (from || to) {
+        url += `?from=${from}&to=${to}`;
+      }
+
+      const res = await fetch(url);
+      const data = await res.json();
+
+      setFlights(data.flights || []);
+      setFilteredFlights(data.flights || []);
+    } catch (err) {
+      console.error("Failed to fetch flights", err);
+    } finally {
+      setLoading(false);
     }
-
-    const res = await fetch(url);
-    const data = await res.json();
-
-    let fetchedFlights = data.flights || [];
-
-    // 🔽 SORTING LOGIC
-    if (sort === "low") {
-      fetchedFlights.sort((a, b) => a.current_price - b.current_price);
-    } else if (sort === "high") {
-      fetchedFlights.sort((a, b) => b.current_price - a.current_price);
-    }
-
-    setFlights(fetchedFlights);
-    setLoading(false);
   };
 
-  // Load all flights initially
+  /* ---------------- INITIAL LOAD ---------------- */
   useEffect(() => {
     fetchFlights();
     // eslint-disable-next-line
   }, []);
 
-  // Re-sort when sort option changes
+  /* ---------------- SORTING ---------------- */
   useEffect(() => {
-    if (flights.length > 0) {
-      fetchFlights();
-    }
-    // eslint-disable-next-line
-  }, [sort]);
+    let sorted = [...flights];
 
+    if (sort === "low") {
+      sorted.sort((a, b) => a.current_price - b.current_price);
+    } else if (sort === "high") {
+      sorted.sort((a, b) => b.current_price - a.current_price);
+    }
+
+    setFilteredFlights(sorted);
+  }, [sort, flights]);
+
+  /* ---------------- BOOK FLIGHT ---------------- */
   const bookFlight = async (flight) => {
     if (!deduct(flight.current_price)) return;
 
@@ -78,7 +82,7 @@ export default function Search() {
       <h2>Search Flights</h2>
 
       {/* 🔍 SEARCH + SORT BAR */}
-      <div style={{ marginBottom: "20px", display: "flex", gap: "10px" }}>
+      <div className="search-bar">
         <input
           placeholder="From (e.g. Delhi)"
           value={from}
@@ -100,28 +104,31 @@ export default function Search() {
         <button onClick={fetchFlights}>Search</button>
       </div>
 
-      {/* ✈️ FLIGHTS LIST */}
+      {/* ⏳ LOADING */}
       {loading && <p>Loading flights...</p>}
 
-      {!loading && flights.length === 0 && (
+      {/* ❌ EMPTY STATE */}
+      {!loading && filteredFlights.length === 0 && (
         <p>No flights found for this route.</p>
       )}
 
-      {flights.map((f) => (
-        <div className="card" key={f.flight_id}>
-          <div>
-            <strong>{f.airline}</strong>
-            <p>
-              {f.departure_city} → {f.arrival_city}
-            </p>
-          </div>
+      {/* ✈️ FLIGHTS LIST */}
+      {!loading &&
+        filteredFlights.map((f) => (
+          <div className="card" key={f.flight_id}>
+            <div>
+              <strong>{f.airline}</strong>
+              <p>
+                {f.departure_city} → {f.arrival_city}
+              </p>
+            </div>
 
-          <div>
-            <p>₹{f.current_price}</p>
-            <button onClick={() => bookFlight(f)}>Book</button>
+            <div className="card-price">
+              <p>₹{f.current_price}</p>
+              <button onClick={() => bookFlight(f)}>Book</button>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
     </div>
   );
 }
