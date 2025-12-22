@@ -1,68 +1,67 @@
 body {
   margin: 0;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background: #f4f6f8;
-  color: #333;
+  font-family: "Segoe UI", sans-serif;
+  background: #f4f6f9;
 }
 
-header {
-  background: linear-gradient(90deg, #1e90ff, #007bff);
-  color: white;
-  padding: 20px;
-  text-align: center;
-  font-size: 26px;
-  font-weight: bold;
-}
-
-.container {
-  max-width: 900px;
-  margin: 30px auto;
-  padding: 0 20px;
-}
-
-.section {
-  background: white;
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 30px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-}
-
-input {
-  padding: 8px;
-  margin-right: 10px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-}
-
-button {
-  padding: 8px 14px;
-  border: none;
-  border-radius: 4px;
-  background: #1e90ff;
-  color: white;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #0b70d0;
-}
-
-.flight-card,
-.history-card {
+.navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #eee;
-  padding: 12px 0;
+  background: #1e90ff;
+  padding: 15px 30px;
+  color: white;
 }
 
-.price {
+.nav-links a {
+  color: white;
+  margin: 0 10px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.wallet {
+  background: white;
+  color: #1e90ff;
+  padding: 6px 12px;
+  border-radius: 20px;
   font-weight: bold;
 }
 
-.success {
-  margin-top: 15px;
-  color: green;
-  font-weight: 500;
+.home {
+  text-align: center;
+  margin-top: 100px;
+}
+
+.primary-btn, .secondary-btn {
+  margin: 10px;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.primary-btn {
+  background: #1e90ff;
+  color: white;
+}
+
+.secondary-btn {
+  background: #ddd;
+}
+
+.section {
+  max-width: 900px;
+  margin: 30px auto;
+}
+
+.card {
+  display: flex;
+  justify-content: space-between;
+  background: white;
+  padding: 15px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
 }

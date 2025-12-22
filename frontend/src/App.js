@@ -1,15 +1,23 @@
 import React from "react";
-import FlightSearch from "./pages/FlightSearch";
-import BookingHistory from "./pages/BookingHistory";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import { WalletProvider } from "./components/WalletContext";
+
+import Home from "./pages/Home";
+import Search from "./pages/Search";
+import History from "./pages/History";
 
 export default function App() {
   return (
-    <>
-      <header>✈️ Flight Booking System</header>
-      <div className="container">
-        <FlightSearch />
-        <BookingHistory />
-      </div>
-    </>
+    <WalletProvider>
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/history" element={<History />} />
+        </Routes>
+      </BrowserRouter>
+    </WalletProvider>
   );
 }

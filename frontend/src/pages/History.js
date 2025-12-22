@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 const API = "http://localhost:5001";
 
-export default function BookingHistory() {
+export default function History() {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
@@ -16,19 +16,18 @@ export default function BookingHistory() {
       <h2>Booking History</h2>
 
       {bookings.map((b) => (
-        <div className="history-card" key={b.id}>
+        <div className="card" key={b.id}>
           <div>
             <strong>{b.passengerName}</strong>
-            <div>{b.route}</div>
+            <p>{b.route}</p>
           </div>
-          <div className="price">₹{b.pricePaid}</div>
-          <a
-            href={`${API}/tickets/${b.pnr}.pdf`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            Download Ticket
-          </a>
+
+          <div>
+            <p>₹{b.pricePaid}</p>
+            <a href={`${API}/tickets/${b.pnr}.pdf`} target="_blank" rel="noreferrer">
+              Download
+            </a>
+          </div>
         </div>
       ))}
     </div>
