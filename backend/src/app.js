@@ -13,9 +13,8 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "http://localhost:3000",
-      "https://flight-booking-system-beryl.vercel.app",
-      "https://flight-booking-system-rdr224ja-cyborgx-hashs-projects.vercel.app",
+      "http://localhost:3000", // local dev
+      "https://flight-booking-system-beryl.vercel.app", // production frontend
     ],
     methods: ["GET", "POST"],
     credentials: true,
