@@ -2,11 +2,12 @@ import React, { useEffect, useState, useContext } from "react";
 import { WalletContext } from "../components/WalletContext";
 import "../styles/search.css";
 
-const API =
-  process.env.REACT_APP_API_URL ||
-  "https://flight-booking-system-1-w7cb.onrender.com";
+// ❗ DO NOT USE FALLBACKS IN PROD
+const API = process.env.REACT_APP_API_URL;
 
-console.log("API URL:", API);
+if (!API) {
+  console.error("❌ REACT_APP_API_URL is NOT defined");
+}
 
 export default function Search() {
   const [flights, setFlights] = useState([]);
@@ -24,32 +25,27 @@ export default function Search() {
       setLoading(true);
       setError("");
 
-      let url = `${API}/flights`;
+      const params = new URLSearchParams();
+      if (from) params.append("from", from);
+      if (to) params.append("to", to);
 
-      if (from || to) {
-        const params = new URLSearchParams();
-        if (from) params.append("from", from);
-        if (to) params.append("to", to);
-        url += `?${params.toString()}`;
-      }
+      const url = `${API}/flights${params.toString() ? `?${params}` : ""}`;
+
+      console.log("📡 Fetching:", url);
 
       const res = await fetch(url);
 
-      // ✅ IMPORTANT: handle non-JSON responses safely
       if (!res.ok) {
         const text = await res.text();
-        console.error("API Error:", res.status, text);
-        throw new Error(`Request failed with ${res.status}`);
+        console.error("API ERROR:", res.status, text);
+        throw new Error(`API failed: ${res.status}`);
       }
 
       const data = await res.json();
-
       setFlights(data.flights || []);
       setFilteredFlights(data.flights || []);
     } catch (err) {
-      console.error("Failed to fetch flights:", err);
-      setFlights([]);
-      setFilteredFlights([]);
+      console.error("Failed to fetch flights", err);
       setError("Failed to load flights. Please try again.");
     } finally {
       setLoading(false);
@@ -58,49 +54,32 @@ export default function Search() {
 
   useEffect(() => {
     fetchFlights();
-    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
     let sorted = [...flights];
-
-    if (sort === "low") {
-      sorted.sort((a, b) => a.current_price - b.current_price);
-    } else if (sort === "high") {
-      sorted.sort((a, b) => b.current_price - a.current_price);
-    }
-
+    if (sort === "low") sorted.sort((a, b) => a.current_price - b.current_price);
+    if (sort === "high") sorted.sort((a, b) => b.current_price - a.current_price);
     setFilteredFlights(sorted);
   }, [sort, flights]);
 
   const bookFlight = async (flight) => {
     if (!deduct(flight.current_price)) return;
 
-    try {
-      const res = await fetch(`${API}/book`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          passengerName: "Saksham",
-          flightId: flight.flight_id,
-        }),
-      });
+    const res = await fetch(`${API}/book`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        passengerName: "Saksham",
+        flightId: flight.flight_id,
+      }),
+    });
 
-      if (!res.ok) {
-        const text = await res.text();
-        throw new Error(text);
-      }
-
-      const data = await res.json();
-
-      if (data.ticketUrl) {
-        window.open(`${API}${data.ticketUrl}`, "_blank");
-      } else {
-        alert(data.error || "Booking failed");
-      }
-    } catch (err) {
-      console.error("Booking error:", err);
-      alert("Booking failed");
+    const data = await res.json();
+    if (data.ticketUrl) {
+      window.open(`${API}${data.ticketUrl}`, "_blank");
+    } else {
+      alert(data.error || "Booking failed");
     }
   };
 
@@ -109,17 +88,8 @@ export default function Search() {
       <h2>Search Flights</h2>
 
       <div className="search-bar">
-        <input
-          placeholder="From (e.g. Delhi)"
-          value={from}
-          onChange={(e) => setFrom(e.target.value)}
-        />
-
-        <input
-          placeholder="To (e.g. Mumbai)"
-          value={to}
-          onChange={(e) => setTo(e.target.value)}
-        />
+        <input placeholder="From" value={from} onChange={(e) => setFrom(e.target.value)} />
+        <input placeholder="To" value={to} onChange={(e) => setTo(e.target.value)} />
 
         <select value={sort} onChange={(e) => setSort(e.target.value)}>
           <option value="">Sort by Price</option>
@@ -131,23 +101,15 @@ export default function Search() {
       </div>
 
       {loading && <p>Loading flights...</p>}
-
       {error && <p style={{ color: "red" }}>{error}</p>}
-
-      {!loading && !error && filteredFlights.length === 0 && (
-        <p>No flights found for this route.</p>
-      )}
 
       {!loading &&
         filteredFlights.map((f) => (
           <div className="card" key={f.flight_id}>
             <div>
               <strong>{f.airline}</strong>
-              <p>
-                {f.departure_city} → {f.arrival_city}
-              </p>
+              <p>{f.departure_city} → {f.arrival_city}</p>
             </div>
-
             <div className="card-price">
               <p>₹{f.current_price}</p>
               <button onClick={() => bookFlight(f)}>Book</button>
