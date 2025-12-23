@@ -2,19 +2,18 @@ import React, { useEffect, useState, useContext } from "react";
 import { WalletContext } from "../components/WalletContext";
 import "../styles/search.css";
 
-const API = "http://localhost:5001";
+const API = process.env.REACT_APP_API_URL;
 
 export default function Search() {
   const [flights, setFlights] = useState([]);
   const [filteredFlights, setFilteredFlights] = useState([]);
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
-  const [sort, setSort] = useState(""); // "", "low", "high"
+  const [sort, setSort] = useState(""); 
   const [loading, setLoading] = useState(false);
 
   const { deduct } = useContext(WalletContext);
 
-  /* ---------------- FETCH FLIGHTS ---------------- */
   const fetchFlights = async () => {
     try {
       setLoading(true);
@@ -36,13 +35,11 @@ export default function Search() {
     }
   };
 
-  /* ---------------- INITIAL LOAD ---------------- */
   useEffect(() => {
     fetchFlights();
     // eslint-disable-next-line
   }, []);
 
-  /* ---------------- SORTING ---------------- */
   useEffect(() => {
     let sorted = [...flights];
 
@@ -55,7 +52,6 @@ export default function Search() {
     setFilteredFlights(sorted);
   }, [sort, flights]);
 
-  /* ---------------- BOOK FLIGHT ---------------- */
   const bookFlight = async (flight) => {
     if (!deduct(flight.current_price)) return;
 
@@ -81,7 +77,6 @@ export default function Search() {
     <div className="section">
       <h2>Search Flights</h2>
 
-      {/* 🔍 SEARCH + SORT BAR */}
       <div className="search-bar">
         <input
           placeholder="From (e.g. Delhi)"
@@ -104,15 +99,12 @@ export default function Search() {
         <button onClick={fetchFlights}>Search</button>
       </div>
 
-      {/* ⏳ LOADING */}
       {loading && <p>Loading flights...</p>}
 
-      {/* ❌ EMPTY STATE */}
       {!loading && filteredFlights.length === 0 && (
         <p>No flights found for this route.</p>
       )}
 
-      {/* ✈️ FLIGHTS LIST */}
       {!loading &&
         filteredFlights.map((f) => (
           <div className="card" key={f.flight_id}>

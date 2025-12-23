@@ -8,7 +8,6 @@ export default function Home() {
 
   return (
     <>
-      {/* HERO SECTION */}
       <div className="home">
         <video autoPlay loop muted playsInline preload="auto">
           <source src={bgVideo} type="video/mp4" />
@@ -29,7 +28,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ABOUT SECTION */}
       <section className="about">
         <h2>About Us</h2>
         <p>
@@ -40,36 +38,29 @@ export default function Home() {
         </p>
       </section>
 
-      {/* FEATURES SECTION */}
       <section className="features">
         <h2>Why Choose Us?</h2>
 
         <div className="feature-grid">
           <div className="feature-card">
-            <h3>💰 Smart Pricing</h3>
+            <h3>Smart Pricing</h3>
             <p>
               Prices adjust dynamically based on demand, ensuring fair and
               transparent fares.
             </p>
           </div>
 
-          <div className="feature-card">
-            <h3>🔐 Secure Payments</h3>
-            <p>
-              Wallet-based booking ensures secure transactions without sharing
-              sensitive details.
-            </p>
-          </div>
+        
 
           <div className="feature-card">
-            <h3>📄 Instant Tickets</h3>
+            <h3> Instant Tickets</h3>
             <p>
               Get downloadable PDF tickets immediately after booking.
             </p>
           </div>
 
           <div className="feature-card">
-            <h3>📊 Booking History</h3>
+            <h3> Booking History</h3>
             <p>
               Track all your past bookings and download tickets anytime.
             </p>
@@ -77,7 +68,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FOOTER */}
       <footer className="footer">
         <p>© 2025 Smart Flight Booking. All rights reserved.</p>
         <p>Built with React, Node.js, Express & Prisma</p>
