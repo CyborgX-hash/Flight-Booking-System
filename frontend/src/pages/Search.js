@@ -2,7 +2,12 @@ import React, { useEffect, useState, useContext } from "react";
 import { WalletContext } from "../components/WalletContext";
 import "../styles/search.css";
 
-const API = process.env.REACT_APP_API_URL;
+const API =
+  process.env.REACT_APP_API_URL ||
+  "https://flight-booking-system-1-w7cb.onrender.com";
+
+console.log("API URL:", API);
+
 
 export default function Search() {
   const [flights, setFlights] = useState([]);
