@@ -8,33 +8,49 @@ const API =
 
 console.log("API URL:", API);
 
-
 export default function Search() {
   const [flights, setFlights] = useState([]);
   const [filteredFlights, setFilteredFlights] = useState([]);
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
-  const [sort, setSort] = useState(""); 
+  const [sort, setSort] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const { deduct } = useContext(WalletContext);
 
   const fetchFlights = async () => {
     try {
       setLoading(true);
+      setError("");
 
       let url = `${API}/flights`;
+
       if (from || to) {
-        url += `?from=${from}&to=${to}`;
+        const params = new URLSearchParams();
+        if (from) params.append("from", from);
+        if (to) params.append("to", to);
+        url += `?${params.toString()}`;
       }
 
       const res = await fetch(url);
+
+      // ✅ IMPORTANT: handle non-JSON responses safely
+      if (!res.ok) {
+        const text = await res.text();
+        console.error("API Error:", res.status, text);
+        throw new Error(`Request failed with ${res.status}`);
+      }
+
       const data = await res.json();
 
       setFlights(data.flights || []);
       setFilteredFlights(data.flights || []);
     } catch (err) {
-      console.error("Failed to fetch flights", err);
+      console.error("Failed to fetch flights:", err);
+      setFlights([]);
+      setFilteredFlights([]);
+      setError("Failed to load flights. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -60,21 +76,31 @@ export default function Search() {
   const bookFlight = async (flight) => {
     if (!deduct(flight.current_price)) return;
 
-    const res = await fetch(`${API}/book`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        passengerName: "Saksham",
-        flightId: flight.flight_id,
-      }),
-    });
+    try {
+      const res = await fetch(`${API}/book`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          passengerName: "Saksham",
+          flightId: flight.flight_id,
+        }),
+      });
 
-    const data = await res.json();
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text);
+      }
 
-    if (data.ticketUrl) {
-      window.open(`${API}${data.ticketUrl}`, "_blank");
-    } else {
-      alert(data.error || "Booking failed");
+      const data = await res.json();
+
+      if (data.ticketUrl) {
+        window.open(`${API}${data.ticketUrl}`, "_blank");
+      } else {
+        alert(data.error || "Booking failed");
+      }
+    } catch (err) {
+      console.error("Booking error:", err);
+      alert("Booking failed");
     }
   };
 
@@ -106,7 +132,9 @@ export default function Search() {
 
       {loading && <p>Loading flights...</p>}
 
-      {!loading && filteredFlights.length === 0 && (
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
+      {!loading && !error && filteredFlights.length === 0 && (
         <p>No flights found for this route.</p>
       )}
 
