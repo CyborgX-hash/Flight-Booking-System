@@ -13,17 +13,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-/* ---------- STATIC FILES ---------- */
 app.use(
   "/tickets",
   express.static(path.resolve(__dirname, "..", "tickets"))
 );
 
-/* ---------- API ROUTES ---------- */
 app.use("/flights", flightRoutes);
 app.use("/book", bookingRoutes);
 app.use("/history", historyRoutes);
-app.use("/wallet", walletRoutes); // ✅ ADD
+app.use("/wallet", walletRoutes); 
 
 /* ---------- HEALTH CHECK ---------- */
 app.get("/", (req, res) => {
