@@ -7,40 +7,66 @@ exports.bookFlight = async (req, res) => {
   try {
     const { passengerName, flightId } = req.body;
 
+    /* ---------- VALIDATION ---------- */
     if (!passengerName || !flightId) {
-      return res.status(400).json({ error: "Missing booking details" });
+      return res.status(400).json({
+        success: false,
+        error: "Passenger name and flight ID are required",
+      });
     }
 
-    // Check flight exists
+    /* ---------- FLIGHT CHECK ---------- */
     const flight = await prisma.flight.findUnique({
       where: { flight_id: flightId },
     });
 
     if (!flight) {
-      return res.status(404).json({ error: "Flight not found" });
+      return res.status(404).json({
+        success: false,
+        error: "Flight not found",
+      });
     }
 
-    // Dynamic pricing
+    /* ---------- DYNAMIC PRICING ---------- */
     const updatedPrice = await handleDynamicPricing(flightId);
 
-    if (!updatedPrice) {
-      return res.status(400).json({ error: "Pricing error" });
+    if (!updatedPrice || updatedPrice <= 0) {
+      return res.status(400).json({
+        success: false,
+        error: "Failed to calculate flight price",
+      });
     }
 
-    // Wallet check
-    const wallet = await prisma.wallet.findUnique({ where: { id: 1 } });
-
-    if (!wallet || wallet.balance < updatedPrice) {
-      return res.status(400).json({ error: "Insufficient wallet balance" });
-    }
-
-    // Deduct wallet (NO TRANSACTION – Accelerate compatible)
-    await prisma.wallet.update({
+    /* ---------- WALLET CHECK ---------- */
+    const wallet = await prisma.wallet.findUnique({
       where: { id: 1 },
-      data: { balance: wallet.balance - updatedPrice },
     });
 
-    // Create booking
+    if (!wallet) {
+      return res.status(500).json({
+        success: false,
+        error: "Wallet not found",
+      });
+    }
+
+    if (wallet.balance < updatedPrice) {
+      return res.status(400).json({
+        success: false,
+        error: "Insufficient wallet balance",
+        balance: wallet.balance,
+        required: updatedPrice,
+      });
+    }
+
+    /* ---------- WALLET DEDUCTION ---------- */
+    const updatedWallet = await prisma.wallet.update({
+      where: { id: 1 },
+      data: {
+        balance: wallet.balance - updatedPrice,
+      },
+    });
+
+    /* ---------- CREATE BOOKING ---------- */
     const booking = await prisma.booking.create({
       data: {
         passengerName,
@@ -52,20 +78,24 @@ exports.bookFlight = async (req, res) => {
       },
     });
 
-    // Generate PDF ticket
+    /* ---------- PDF TICKET ---------- */
     await generateTicketPDF(booking);
 
+    /* ---------- SUCCESS RESPONSE ---------- */
     return res.status(201).json({
       success: true,
+      message: "Flight booked successfully",
       booking,
+      walletBalance: updatedWallet.balance, // 🔥 VERY IMPORTANT
       ticketUrl: `/tickets/${booking.pnr}.pdf`,
     });
 
   } catch (err) {
     console.error("❌ Booking Error:", err);
+
     return res.status(500).json({
-      error: "Booking failed",
-      details: err.message,
+      success: false,
+      error: "Booking failed due to server error",
     });
   }
 };
