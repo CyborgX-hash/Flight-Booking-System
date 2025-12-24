@@ -1,4 +1,3 @@
-/* ================= SEARCH PAGE ================= */
 
 .section {
     padding-top: 110px; /* navbar offset */
@@ -8,7 +7,6 @@
     padding-right: 20px;
   }
   
-  /* ===== SEARCH BAR ===== */
   
   .search-bar {
     display: flex;
@@ -47,7 +45,6 @@
     box-shadow: 0 6px 20px rgba(30, 144, 255, 0.5);
   }
   
-  /* ===== FLIGHT CARD ===== */
   
   .card {
     background: linear-gradient(
@@ -70,7 +67,6 @@
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
   }
   
-  /* LEFT SIDE (AIRLINE + ROUTE) */
   .card strong {
     font-size: 18px;
     color: #ffffff;
@@ -82,7 +78,6 @@
     font-size: 14px;
   }
   
-  /* RIGHT SIDE (PRICE + BUTTON) */
   .card-price {
     text-align: right;
   }

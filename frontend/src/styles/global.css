@@ -8,7 +8,7 @@
     margin: 0;
     padding: 0;
     width: 100%;
-    overflow-x: hidden; /* ✅ FIX LEFT/RIGHT WHITE SPACE */
+    overflow-x: hidden; 
     background: black;
   }
   

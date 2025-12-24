@@ -7,7 +7,6 @@ html, body {
     background: black;
   }
   
-  /* ================= HERO SECTION ================= */
   
   .home {
     position: relative;
@@ -17,18 +16,16 @@ html, body {
     background: black;
   }
   
-  /* 🎥 BACKGROUND VIDEO */
   .home video {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;        /* ✅ NO 100vw */
+    width: 100%;       
     height: 100%;
     object-fit: cover;
     z-index: 0;
   }
   
-  /* 🌑 DARK OVERLAY */
   .home::after {
     content: "";
     position: absolute;
@@ -41,12 +38,11 @@ html, body {
     z-index: 1;
   }
   
-  /* 🧱 HERO CONTENT */
   .home-overlay {
     position: relative;
     z-index: 2;
     height: 100%;
-    padding-top: 72px; /* match navbar height */
+    padding-top: 72px; 
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -54,7 +50,6 @@ html, body {
     text-align: center;
   }
   
-  /* ✨ HERO TEXT */
   .home h1 {
     font-size: 60px;
     font-weight: 700;
@@ -72,7 +67,6 @@ html, body {
     text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
   }
   
-  /* 🔥 HERO BUTTONS */
   .home-buttons {
     display: flex;
     gap: 20px;
@@ -95,7 +89,6 @@ html, body {
     box-shadow: 0 12px 35px rgba(30, 144, 255, 0.6);
   }
   
-  /* ================= ABOUT SECTION ================= */
   
   .about {
     padding: 80px 20px;
@@ -117,7 +110,6 @@ html, body {
     line-height: 1.6;
   }
   
-  /* ================= FEATURES ================= */
   
   .features {
     padding: 80px 20px;
@@ -163,7 +155,6 @@ html, body {
     line-height: 1.5;
   }
   
-  /* ================= FOOTER ================= */
   
   .footer {
     padding: 30px 20px;

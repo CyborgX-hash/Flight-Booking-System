@@ -15,7 +15,6 @@ exports.generateTicketPDF = (booking) => {
     const stream = fs.createWriteStream(filePath);
     doc.pipe(stream);
 
-    // PDF Content
     doc.fontSize(20).text("✈️ Flight Ticket", { align: "center" });
     doc.moveDown();
 

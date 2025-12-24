@@ -10,7 +10,6 @@ export const WalletProvider = ({ children }) => {
   const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  // 🔄 Fetch wallet from backend
   const fetchWallet = async () => {
     try {
       const res = await fetch(`${API}/wallet`);

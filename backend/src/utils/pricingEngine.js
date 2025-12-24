@@ -6,12 +6,10 @@ const TEN_MIN = 10 * 60 * 1000;
 exports.handleDynamicPricing = async (flightId) => {
   const now = new Date();
 
-  // Log booking attempt
   await prisma.priceAttempt.create({
     data: { flightId },
   });
 
-  // Get attempts in last 5 minutes
   const recentAttempts = await prisma.priceAttempt.findMany({
     where: {
       flightId,
@@ -27,7 +25,6 @@ exports.handleDynamicPricing = async (flightId) => {
 
   if (!flight) return null;
 
-  // Reset price if last attempt > 10 minutes ago
   const lastAttempt = await prisma.priceAttempt.findFirst({
     where: { flightId },
     orderBy: { createdAt: "desc" },
@@ -42,7 +39,6 @@ exports.handleDynamicPricing = async (flightId) => {
     return flight.base_price;
   }
 
-  // Apply surge pricing
   if (recentAttempts.length >= 3) {
     const surgedPrice = Math.round(flight.base_price * 1.1);
 

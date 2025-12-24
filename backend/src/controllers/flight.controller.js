@@ -11,7 +11,7 @@ exports.searchFlights = async (req, res) => {
             ? {
                 departure_city: {
                   equals: from,
-                  mode: "insensitive", // ✅ CASE-INSENSITIVE
+                  mode: "insensitive",
                 },
               }
             : {},
@@ -19,7 +19,7 @@ exports.searchFlights = async (req, res) => {
             ? {
                 arrival_city: {
                   equals: to,
-                  mode: "insensitive", // ✅ CASE-INSENSITIVE
+                  mode: "insensitive", // 
                 },
               }
             : {},

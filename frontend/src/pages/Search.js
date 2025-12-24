@@ -2,7 +2,6 @@ import React, { useEffect, useState, useContext } from "react";
 import { WalletContext } from "../components/WalletContext";
 import "../styles/search.css";
 
-// ❗ DO NOT USE FALLBACKS IN PROD
 const API = process.env.REACT_APP_API_URL;
 
 if (!API) {

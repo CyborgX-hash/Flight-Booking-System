@@ -7,7 +7,6 @@ exports.bookFlight = async (req, res) => {
   try {
     const { passengerName, flightId } = req.body;
 
-    /* ---------- VALIDATION ---------- */
     if (!passengerName || !flightId) {
       return res.status(400).json({
         success: false,
@@ -15,7 +14,6 @@ exports.bookFlight = async (req, res) => {
       });
     }
 
-    /* ---------- FLIGHT CHECK ---------- */
     const flight = await prisma.flight.findUnique({
       where: { flight_id: flightId },
     });
@@ -27,7 +25,6 @@ exports.bookFlight = async (req, res) => {
       });
     }
 
-    /* ---------- DYNAMIC PRICING ---------- */
     const updatedPrice = await handleDynamicPricing(flightId);
 
     if (!updatedPrice || updatedPrice <= 0) {
@@ -37,7 +34,6 @@ exports.bookFlight = async (req, res) => {
       });
     }
 
-    /* ---------- WALLET CHECK ---------- */
     const wallet = await prisma.wallet.findUnique({
       where: { id: 1 },
     });
@@ -58,7 +54,6 @@ exports.bookFlight = async (req, res) => {
       });
     }
 
-    /* ---------- WALLET DEDUCTION ---------- */
     const updatedWallet = await prisma.wallet.update({
       where: { id: 1 },
       data: {
@@ -66,7 +61,6 @@ exports.bookFlight = async (req, res) => {
       },
     });
 
-    /* ---------- CREATE BOOKING ---------- */
     const booking = await prisma.booking.create({
       data: {
         passengerName,
@@ -78,15 +72,13 @@ exports.bookFlight = async (req, res) => {
       },
     });
 
-    /* ---------- PDF TICKET ---------- */
     await generateTicketPDF(booking);
 
-    /* ---------- SUCCESS RESPONSE ---------- */
     return res.status(201).json({
       success: true,
       message: "Flight booked successfully",
       booking,
-      walletBalance: updatedWallet.balance, // 🔥 VERY IMPORTANT
+      walletBalance: updatedWallet.balance, 
       ticketUrl: `/tickets/${booking.pnr}.pdf`,
     });
 
