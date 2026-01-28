@@ -1,68 +1,103 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import api from '../api/axios';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../api/axios";
 import AirportInput from "../components/AirportInput";
 
-const SearchFlights=()=>{
-    const [form,setform] = useState({
-        origin:"",
-        destination:"",
-        date:"",
-        adults:1,
-    })
-    const [loading,setloading] = useState(false)
-    const[error,seterror] = useState("")
-    const navigate = useNavigate()
-    const hangleChanges = (e)=>{
-        setform({...form,[e.target.name]:e.target.value})
-    }
-    const handleSearch= async (e)=>{
-        e.preventDefault()
-        setloading(true)
-        seterror("")
-        try{
-            const res = await api.get("/flights/search",{
-                params:form
-            })
-            navigate("/results",{state:{flights:res.data}})
-        }
-        catch(err){
-            seterror("Failed to fetch flights.")
-        }
-        finally{
-            setloading(false)
-        }
-    }
-    return(
-        <div style={styles.container}>
-            <h2>Search Flights</h2>
-            <form onSubmit={handleSearch} style={styles.form}>
-                <AirportInput placeholder="From (City or Code)" onSelect={(code) => setform({ ...form, origin: code })}/>                
-                <AirportInput placeholder="To (City or Code)" onSelect={(code) => setform({ ...form, destination: code })}/>                <input type="date" name="date" onChange={hangleChanges} required/>
-                <input type="number" name="adults" min="1" placeholder="Adults" value={form.adults} onChange={hangleChanges} required/>
-                <button type="submit">{loading ? "Searching..." : "Search Flights"}</button>
-            </form>
-            {error && <p style={styles.error}>{error}</p>}
+const SearchFlights = () => {
+  const [form, setForm] = useState({
+    origin: "",
+    destination: "",
+    date: "",
+  });
 
-        </div>
-    )
-    
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-}
-const styles = {
-    container: {
-      maxWidth: "600px",
-      margin: "60px auto",
-      padding: "20px",
-    },
-    form: {
-      display: "grid",
-      gap: "12px",
-    },
-    error: {
-      color: "red",
-      marginTop: "10px",
-    },
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
-export default SearchFlights;
 
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    if (!form.origin || !form.destination || !form.date) {
+      setError("Please select origin, destination and date");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const res = await api.get("/flights/search", {
+        params: {
+          ...form,
+          origin: form.origin.toUpperCase(),
+          destination: form.destination.toUpperCase(),
+        },
+      });
+
+      const flights = res.data?.data || res.data;
+
+      navigate("/results", {
+        state: { flights },
+      });
+    } catch (err) {
+      setError(
+        "Flight service is temporarily unavailable. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div style={styles.container}>
+      <h2>Search Flights ✈️</h2>
+
+      <form onSubmit={handleSearch} style={styles.form}>
+        <AirportInput
+          placeholder="From (City or Code)"
+          onSelect={(code) => setForm({ ...form, origin: code })}
+        />
+
+        <AirportInput
+          placeholder="To (City or Code)"
+          onSelect={(code) => setForm({ ...form, destination: code })}
+        />
+
+        <input
+          type="date"
+          name="date"
+          onChange={handleChange}
+          required
+        />
+
+        <button type="submit" disabled={loading}>
+          {loading ? "Searching..." : "Search Flights"}
+        </button>
+      </form>
+
+      {error && <p style={styles.error}>{error}</p>}
+    </div>
+  );
+};
+
+const styles = {
+  container: {
+    maxWidth: "600px",
+    margin: "60px auto",
+    padding: "20px",
+  },
+  form: {
+    display: "grid",
+    gap: "12px",
+  },
+  error: {
+    color: "red",
+    marginTop: "10px",
+  },
+};
+
+export default SearchFlights;

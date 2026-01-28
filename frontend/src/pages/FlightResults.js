@@ -6,6 +6,9 @@ const FlightResults=()=>{
     if(flights.length === 0){
         return <p style={{padding:"40px"}}>No flights found</p>
     }
+    const handleSelectFlight = (flight) => {
+        navigate("/booking", { state: { flight } });
+    };
     return(
         <div style={StyleSheet.container}>
             <h2>Available Flights</h2>
@@ -25,7 +28,7 @@ const FlightResults=()=>{
                         <p>
                             Price : ₹{flight.price.total} {flight.price.currency}
                         </p>
-                        <button onClick={()=> navigate("/bookings",{state:{flight},})}>Book</button>
+                        <button style={styles.button} onClick={()=> handleSelectFlight(flight)}>Select Flight</button>
                     </div>
                 )
             })}

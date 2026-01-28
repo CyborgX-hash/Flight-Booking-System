@@ -6,22 +6,42 @@ const bookingSchema = new mongoose.Schema(
             ref:"User",
             required:true
         },
-        bookingReferences:{
+        bookingReference:{
             type:String,
             required:true,
             unique:true
         },
         flight:{
-            airline:String,
-            flightNumber:[String],
-            origin:String,
-            destination:String,
-            arrivalTime:String,
-            duration:String,
+            airline: String,
+            flightNumbers: [String],
+            origin: String,
+            destination: String,
+            departureTime: String,
+            arrivalTime: String,
+            duration: String,
+
         },
-        price:{
-            type:Number,
-            currency:String
+        passengers: [
+            {
+              name: {
+                type: String,
+                required: true,
+              },
+              age: {
+                type: Number,
+                required: true,
+              },
+            },
+        ],
+        price: {
+            total: {
+              type: Number,
+              required: true,
+            },
+            currency: {
+              type: String,
+              default: "INR",
+            },
         },
         status:{
             type:String,
