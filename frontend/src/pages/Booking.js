@@ -6,21 +6,22 @@ const Booking = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
 
-  // ✅ Hooks MUST be at top
-  const [passengers, setPassengers] = useState([
-    { name: "", age: "" },
-  ]);
+  const [passengers, setPassengers] = useState([{ name: "", age: "" }]);
+  const [loading, setLoading] = useState(false);
 
   const flight = state?.flight;
 
-  // ✅ early return AFTER hooks
   if (!flight) {
     return <p style={{ padding: "40px" }}>No flight selected.</p>;
   }
 
-  const itinerary = flight.itineraries[0];
-  const segments = itinerary.segments;
-  const pricePerPassenger = Number(flight.price.total);
+  const itinerary = flight.itineraries?.[0];
+  const segments = itinerary?.segments || [];
+  const pricePerPassenger = Number(flight.price?.total || 0);
+
+  if (!segments.length || !itinerary) {
+    return <p style={{ padding: "40px" }}>Invalid flight data.</p>;
+  }
 
   const addPassenger = () => {
     setPassengers([...passengers, { name: "", age: "" }]);
@@ -39,6 +40,17 @@ const Booking = () => {
   const totalPrice = passengers.length * pricePerPassenger;
 
   const handleCheckout = async () => {
+    const validPassengers = passengers.filter(
+      (p) => p.name.trim() && Number(p.age) > 0
+    );
+
+    if (validPassengers.length !== passengers.length) {
+      alert("Please enter valid passenger name and age");
+      return;
+    }
+
+    setLoading(true);
+
     try {
       const payload = {
         flight: {
@@ -47,27 +59,33 @@ const Booking = () => {
             (s) => `${s.carrierCode}-${s.number}`
           ),
           origin: segments[0].departure.iataCode,
-          destination:
-            segments[segments.length - 1].arrival.iataCode,
+          destination: segments[segments.length - 1].arrival.iataCode,
           departureTime: segments[0].departure.at,
-          arrivalTime:
-            segments[segments.length - 1].arrival.at,
+          arrivalTime: segments[segments.length - 1].arrival.at,
           duration: itinerary.duration,
         },
-        passengers,
+        passengers: validPassengers.map((p) => ({
+          name: p.name.trim(),
+          age: Number(p.age),
+        })),
         price: {
           total: totalPrice,
-          currency: flight.price.currency,
+          currency: flight.price.currency || "INR",
         },
       };
 
+      // ✅ Capture response
       const res = await api.post("/bookings", payload);
-      navigate("/checkout-success", {
-  state: { booking: res.data },
-});
 
+      // ✅ Redirect to checkout success page
+      navigate("/checkout-success", {
+        state: { booking: res.data },
+      });
     } catch (error) {
+      console.error("Booking error:", error.response?.data || error);
       alert("Booking failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -75,7 +93,6 @@ const Booking = () => {
     <div style={styles.container}>
       <h2>Booking Details</h2>
 
-      {/* Flight summary */}
       <div style={styles.card}>
         <p>
           <strong>
@@ -87,7 +104,6 @@ const Booking = () => {
         <p>Price per passenger: ₹{pricePerPassenger}</p>
       </div>
 
-      {/* Passenger details */}
       <h3>Passenger Details</h3>
 
       {passengers.map((p, index) => (
@@ -100,7 +116,6 @@ const Booking = () => {
               handleChange(index, "name", e.target.value)
             }
           />
-
           <input
             type="number"
             placeholder="Age"
@@ -109,7 +124,6 @@ const Booking = () => {
               handleChange(index, "age", e.target.value)
             }
           />
-
           {passengers.length > 1 && (
             <button onClick={() => removePassenger(index)}>
               Remove
@@ -122,8 +136,12 @@ const Booking = () => {
 
       <h3>Total Price: ₹{totalPrice}</h3>
 
-      <button style={styles.checkout} onClick={handleCheckout}>
-        Checkout & Confirm
+      <button
+        style={styles.checkout}
+        onClick={handleCheckout}
+        disabled={loading}
+      >
+        {loading ? "Booking..." : "Checkout & Confirm"}
       </button>
     </div>
   );
