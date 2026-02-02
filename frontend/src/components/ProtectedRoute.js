@@ -1,7 +1,19 @@
-import {Navigate} from 'react-router-dom';
-import { isAuthenticated } from '../utils/auth';
-import { Children } from 'react';
-const ProtectedRoute = ({children})=>{
-    return isAuthenticated()? children : <Navigate to="/login"/>
-}
-export default ProtectedRoute;
+import { Navigate, Outlet } from "react-router-dom";
+import Navbar from "./Navbar";
+
+const ProtectedLayout = () => {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return (
+    <>
+      <Navbar />
+      <Outlet />
+    </>
+  );
+};
+
+export default ProtectedLayout;

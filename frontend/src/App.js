@@ -1,22 +1,36 @@
-import {BrowserRouter,Routes,Route} from "react-router-dom"
-import Login from "./pages/Login"
-import Signup from "./pages/Signup"
-import SearchFlights from "./pages/SearchFlights"
-import FlightResults from "./pages/FlightResults"
-import MyBookings from "./pages/MyBookings"
-import ProtectedRoute from "./components/ProtectedRoute"
-function App(){
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import SearchFlights from "./pages/SearchFlights";
+import FlightResults from "./pages/FlightResults";
+import Booking from "./pages/Booking";
+import MyBookings from "./pages/MyBookings";
+import CheckoutSuccess from "./pages/CheckoutSuccess";
+
+
+import ProtectedLayout from "./components/ProtectedRoute";
+
+function App() {
   return (
     <BrowserRouter>
-    <Routes>
-      <Route path="/login" element={<Login/>}/>
-      <Route path="/signup" element={<Signup/>}/>
-      <Route path="/" element = {<ProtectedRoute><SearchFlights/></ProtectedRoute>}/>
-      <Route path="/results" element = {<ProtectedRoute><FlightResults/></ProtectedRoute>}/>
-      <Route path="/bookings" element = {<ProtectedRoute><MyBookings/></ProtectedRoute>}/>
+      <Routes>
+        {/* Public routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
 
-    </Routes>
+        {/* Protected routes (with Navbar) */}
+        <Route element={<ProtectedLayout />}>
+          <Route path="/" element={<SearchFlights />} />
+          <Route path="/results" element={<FlightResults />} />
+          <Route path="/booking" element={<Booking />} />
+          <Route path="/bookings" element={<MyBookings />} />
+          <Route path="/checkout-success" element={<CheckoutSuccess />} />
+
+        </Route>
+      </Routes>
     </BrowserRouter>
-  )
+  );
 }
-export default App
+
+export default App;
