@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import api from "../api/axios";
+import "./Booking.css";
 
 const Booking = () => {
   const { state } = useLocation();
@@ -90,10 +91,10 @@ const Booking = () => {
   };
 
   return (
-    <div style={styles.container}>
+    <div className="booking-container">
       <h2>Booking Details</h2>
 
-      <div style={styles.card}>
+      <div className="booking-flight-card">
         <p>
           <strong>
             {segments[0].departure.iataCode} →{" "}
@@ -104,40 +105,42 @@ const Booking = () => {
         <p>Price per passenger: ₹{pricePerPassenger}</p>
       </div>
 
-      <h3>Passenger Details</h3>
+      <div className="passenger-section">
+        <h3>Passenger Details</h3>
 
-      {passengers.map((p, index) => (
-        <div key={index} style={styles.passenger}>
-          <input
-            type="text"
-            placeholder="Passenger Name"
-            value={p.name}
-            onChange={(e) =>
-              handleChange(index, "name", e.target.value)
-            }
-          />
-          <input
-            type="number"
-            placeholder="Age"
-            value={p.age}
-            onChange={(e) =>
-              handleChange(index, "age", e.target.value)
-            }
-          />
-          {passengers.length > 1 && (
-            <button onClick={() => removePassenger(index)}>
-              Remove
-            </button>
-          )}
-        </div>
-      ))}
+        {passengers.map((p, index) => (
+          <div key={index} className="passenger-item">
+            <input
+              type="text"
+              placeholder="Passenger Name"
+              value={p.name}
+              onChange={(e) =>
+                handleChange(index, "name", e.target.value)
+              }
+            />
+            <input
+              type="number"
+              placeholder="Age"
+              value={p.age}
+              onChange={(e) =>
+                handleChange(index, "age", e.target.value)
+              }
+            />
+            {passengers.length > 1 && (
+              <button onClick={() => removePassenger(index)}>
+                Remove
+              </button>
+            )}
+          </div>
+        ))}
 
-      <button onClick={addPassenger}>Add Passenger</button>
+        <button className="add-passenger-btn" onClick={addPassenger}>Add Passenger</button>
+      </div>
 
-      <h3>Total Price: ₹{totalPrice}</h3>
+      <h3 className="total-price">Total Price: ₹{totalPrice}</h3>
 
       <button
-        style={styles.checkout}
+        className="checkout-button"
         onClick={handleCheckout}
         disabled={loading}
       >
@@ -145,30 +148,6 @@ const Booking = () => {
       </button>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    maxWidth: "800px",
-    margin: "40px auto",
-    padding: "20px",
-  },
-  card: {
-    border: "1px solid #ddd",
-    padding: "15px",
-    borderRadius: "8px",
-    marginBottom: "20px",
-  },
-  passenger: {
-    display: "flex",
-    gap: "10px",
-    marginBottom: "10px",
-  },
-  checkout: {
-    marginTop: "20px",
-    padding: "10px 16px",
-    fontSize: "16px",
-  },
 };
 
 export default Booking;

@@ -1,0 +1,186 @@
+.booking-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    animation: fadeIn 0.6s ease-out;
+}
+
+.booking-container h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 32px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 800;
+}
+
+.booking-container h3 {
+    font-size: 1.5rem;
+    color: #2d3748;
+    margin-top: 32px;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.booking-flight-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 28px;
+    margin-bottom: 32px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.booking-flight-card p {
+    margin: 10px 0;
+    color: #4a5568;
+    font-size: 15px;
+}
+
+.booking-flight-card strong {
+    color: #2d3748;
+    font-size: 1.3rem;
+}
+
+.passenger-section {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 32px;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.passenger-item {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+    align-items: center;
+    padding: 20px;
+    background: rgba(102, 126, 234, 0.05);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.passenger-item:hover {
+    background: rgba(102, 126, 234, 0.08);
+    transform: translateX(4px);
+}
+
+.passenger-item input {
+    flex: 1;
+    padding: 14px 18px;
+    border: 2px solid rgba(102, 126, 234, 0.2);
+    border-radius: 10px;
+    font-size: 15px;
+    background: white;
+    transition: all 0.3s ease;
+}
+
+.passenger-item input:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+}
+
+.passenger-item input[type="number"] {
+    max-width: 120px;
+}
+
+.passenger-item button {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #f56565 0%, #c53030 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(245, 101, 101, 0.3);
+}
+
+.passenger-item button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(245, 101, 101, 0.4);
+}
+
+.add-passenger-btn {
+    padding: 12px 24px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #667eea;
+    border: 2px solid #667eea;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 8px;
+}
+
+.add-passenger-btn:hover {
+    background: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+}
+
+.total-price {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 32px 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.checkout-button {
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(72, 187, 120, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.checkout-button:hover:not(:disabled) {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(72, 187, 120, 0.5);
+}
+
+.checkout-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.booking-empty {
+    text-align: center;
+    padding: 60px 40px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    color: #4a5568;
+    font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+    .passenger-item {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .passenger-item input[type="number"] {
+        max-width: 100%;
+    }
+}

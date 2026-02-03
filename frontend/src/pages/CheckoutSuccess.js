@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import "./CheckoutSuccess.css";
 
 const CheckoutSuccess = () => {
   const { state } = useLocation();
@@ -7,55 +8,53 @@ const CheckoutSuccess = () => {
   const booking = state?.booking;
 
   if (!booking) {
-    return <p style={{ padding: "40px" }}>No booking details found.</p>;
+    return <p className="success-empty">No booking details found.</p>;
   }
 
   return (
-    <div style={styles.container}>
-      <h2>🎉 Booking Confirmed!</h2>
+    <div className="success-container">
+      <div className="success-icon">🎉</div>
+      <h2>Booking Confirmed!</h2>
 
-      <div style={styles.card}>
-        <p>
-          <strong>
-            {booking.flight.origin} → {booking.flight.destination}
-          </strong>
-        </p>
+      <div className="success-card">
+        <div className="success-route">
+          {booking.flight.origin}
+          <span className="success-arrow">→</span>
+          {booking.flight.destination}
+        </div>
 
-        <p>Airline: {booking.flight.airline}</p>
-        <p>Duration: {booking.flight.duration}</p>
+        <div className="success-details">
+          <div className="success-detail-item">
+            <span className="success-detail-label">Airline</span>
+            <span className="success-detail-value">{booking.flight.airline}</span>
+          </div>
+          <div className="success-detail-item">
+            <span className="success-detail-label">Duration</span>
+            <span className="success-detail-value">{booking.flight.duration}</span>
+          </div>
+          <div className="success-detail-item">
+            <span className="success-detail-label">Status</span>
+            <span className="success-detail-value">{booking.status}</span>
+          </div>
+        </div>
 
-        <p>
+        <div className="success-price">
           Total Paid: ₹{booking.price.total} {booking.price.currency}
-        </p>
+        </div>
 
-        <p>
-          Booking Reference:{" "}
-          <strong>{booking.bookingReference}</strong>
-        </p>
-
-        <p>Status: {booking.status}</p>
+        <div className="success-reference">
+          <div className="success-reference-label">Booking Reference</div>
+          <div className="success-reference-value">{booking.bookingReference}</div>
+        </div>
       </div>
 
-      <button onClick={() => navigate("/bookings")}>
-        View My Bookings
-      </button>
+      <div className="success-actions">
+        <button onClick={() => navigate("/bookings")}>
+          View My Bookings
+        </button>
+      </div>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    maxWidth: "700px",
-    margin: "60px auto",
-    padding: "20px",
-    textAlign: "center",
-  },
-  card: {
-    border: "1px solid #ddd",
-    borderRadius: "8px",
-    padding: "20px",
-    margin: "20px 0",
-  },
 };
 
 export default CheckoutSuccess;

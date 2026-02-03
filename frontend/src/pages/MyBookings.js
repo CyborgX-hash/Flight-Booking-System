@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios";
+import "./MyBookings.css";
 
 const MyBookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -19,45 +20,46 @@ const MyBookings = () => {
   }, []);
 
   return (
-    <div style={styles.container}>
+    <div className="bookings-container">
       <h2>My Bookings</h2>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p className="bookings-error">{error}</p>}
 
-      {bookings.length === 0 && <p>No bookings found.</p>}
+      {bookings.length === 0 && <p className="bookings-empty">No bookings found.</p>}
 
       {bookings.map((b) => (
-        <div key={b._id} style={styles.card}>
-          <p>
-            <strong>
-              {b.flight.origin} → {b.flight.destination}
-            </strong>
-          </p>
-          <p>Flight: {b.flight.flightNumbers.join(", ")}</p>
-          <p>Duration: {b.flight.duration}</p>
-          <p>
-            Price: ₹{b.price.total} {b.price.currency}
-          </p>
-          <p>Status: {b.status}</p>
-          <p>Ref: {b.bookingReference}</p>
+        <div key={b._id} className="booking-card">
+          <div className="booking-header">
+            <div className="booking-route">
+              {b.flight.origin}
+              <span className="booking-arrow">→</span>
+              {b.flight.destination}
+            </div>
+            <div className={`booking-status ${b.status.toLowerCase()}`}>
+              {b.status}
+            </div>
+          </div>
+          <div className="booking-details">
+            <div className="booking-detail-item">
+              <span className="booking-detail-label">Flight</span>
+              <span className="booking-detail-value">{b.flight.flightNumbers.join(", ")}</span>
+            </div>
+            <div className="booking-detail-item">
+              <span className="booking-detail-label">Duration</span>
+              <span className="booking-detail-value">{b.flight.duration}</span>
+            </div>
+          </div>
+          <div className="booking-price">
+            ₹{b.price.total} {b.price.currency}
+          </div>
+          <div className="booking-reference">
+            <div className="booking-reference-label">Booking Reference</div>
+            <div className="booking-reference-value">{b.bookingReference}</div>
+          </div>
         </div>
       ))}
     </div>
   );
-};
-
-const styles = {
-  container: {
-    maxWidth: "800px",
-    margin: "40px auto",
-    padding: "20px",
-  },
-  card: {
-    border: "1px solid #ddd",
-    borderRadius: "8px",
-    padding: "12px",
-    marginBottom: "12px",
-  },
 };
 
 export default MyBookings;

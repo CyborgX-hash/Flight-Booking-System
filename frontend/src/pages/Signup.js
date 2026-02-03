@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api/axios";
+import "./Signup.css";
 
 const Signup = () => {
   const [form, setForm] = useState({
@@ -28,50 +29,46 @@ const Signup = () => {
   };
 
   return (
-    <div style={styles.container}>
+    <div className="signup-container">
       <h2>Signup</h2>
 
-      {error && <p style={styles.error}>{error}</p>}
+      <div className="signup-card">
+        {error && <p className="signup-error">{error}</p>}
 
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          onChange={handleChange}
-          required
-        />
+        <form onSubmit={handleSubmit} className="signup-form">
+          <input
+            type="text"
+            name="name"
+            placeholder="Name"
+            onChange={handleChange}
+            required
+          />
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-          required
-        />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            onChange={handleChange}
+            required
+          />
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={handleChange}
-          required
-        />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            onChange={handleChange}
+            required
+          />
 
-        <button type="submit">Signup</button>
-      </form>
+          <button type="submit">Signup</button>
+        </form>
 
-      <p>
-        Already have an account? <Link to="/login">Login</Link>
-      </p>
+        <p className="signup-footer">
+          Already have an account? <Link to="/login">Login</Link>
+        </p>
+      </div>
     </div>
   );
-};
-
-const styles = {
-  container: { maxWidth: "400px", margin: "80px auto", textAlign: "center" },
-  form: { display: "flex", flexDirection: "column", gap: "10px" },
-  error: { color: "red" },
 };
 
 export default Signup;

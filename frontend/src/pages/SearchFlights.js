@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import AirportInput from "../components/AirportInput";
+import "./SearchFlights.css";
 
 const SearchFlights = () => {
   const [form, setForm] = useState({
@@ -53,51 +54,37 @@ const SearchFlights = () => {
   };
 
   return (
-    <div style={styles.container}>
+    <div className="search-container">
       <h2>Search Flights ✈️</h2>
 
-      <form onSubmit={handleSearch} style={styles.form}>
-        <AirportInput
-          placeholder="From (City or Code)"
-          onSelect={(code) => setForm({ ...form, origin: code })}
-        />
+      <div className="search-card">
+        <form onSubmit={handleSearch} className="search-form">
+          <AirportInput
+            placeholder="From (City or Code)"
+            onSelect={(code) => setForm({ ...form, origin: code })}
+          />
 
-        <AirportInput
-          placeholder="To (City or Code)"
-          onSelect={(code) => setForm({ ...form, destination: code })}
-        />
+          <AirportInput
+            placeholder="To (City or Code)"
+            onSelect={(code) => setForm({ ...form, destination: code })}
+          />
 
-        <input
-          type="date"
-          name="date"
-          onChange={handleChange}
-          required
-        />
+          <input
+            type="date"
+            name="date"
+            onChange={handleChange}
+            required
+          />
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Searching..." : "Search Flights"}
-        </button>
-      </form>
+          <button type="submit" disabled={loading}>
+            {loading ? "Searching..." : "Search Flights"}
+          </button>
+        </form>
 
-      {error && <p style={styles.error}>{error}</p>}
+        {error && <p className="search-error">{error}</p>}
+      </div>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    maxWidth: "600px",
-    margin: "60px auto",
-    padding: "20px",
-  },
-  form: {
-    display: "grid",
-    gap: "12px",
-  },
-  error: {
-    color: "red",
-    marginTop: "10px",
-  },
 };
 
 export default SearchFlights;

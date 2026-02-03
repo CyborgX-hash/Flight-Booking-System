@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { airports } from "../utils/airports";
+import "./AirportInput.css";
 
 const AirportInput = ({ placeholder, onSelect }) => {
   const [query, setQuery] = useState("");
@@ -30,7 +31,7 @@ const AirportInput = ({ placeholder, onSelect }) => {
   };
 
   return (
-    <div style={{ position: "relative" }}>
+    <div className="airport-input-container">
       <input
         type="text"
         placeholder={placeholder}
@@ -40,11 +41,11 @@ const AirportInput = ({ placeholder, onSelect }) => {
       />
 
       {suggestions.length > 0 && (
-        <div style={styles.dropdown}>
+        <div className="airport-dropdown">
           {suggestions.map((a) => (
             <div
               key={a.code}
-              style={styles.item}
+              className="airport-dropdown-item"
               onClick={() => handleSelect(a)}
             >
               {a.city} – {a.name} ({a.code})
@@ -54,22 +55,6 @@ const AirportInput = ({ placeholder, onSelect }) => {
       )}
     </div>
   );
-};
-
-const styles = {
-  dropdown: {
-    position: "absolute",
-    top: "100%",
-    left: 0,
-    right: 0,
-    border: "1px solid #ccc",
-    background: "#fff",
-    zIndex: 10,
-  },
-  item: {
-    padding: "8px",
-    cursor: "pointer",
-  },
 };
 
 export default AirportInput;

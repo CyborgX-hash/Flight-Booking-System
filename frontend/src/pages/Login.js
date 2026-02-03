@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api/axios";
+import "./Login.css";
 
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -25,42 +26,38 @@ const Login = () => {
   };
 
   return (
-    <div style={styles.container}>
+    <div className="login-container">
       <h2>Login</h2>
 
-      {error && <p style={styles.error}>{error}</p>}
+      <div className="login-card">
+        {error && <p className="login-error">{error}</p>}
 
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-          required
-        />
+        <form onSubmit={handleSubmit} className="login-form">
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            onChange={handleChange}
+            required
+          />
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={handleChange}
-          required
-        />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            onChange={handleChange}
+            required
+          />
 
-        <button type="submit">Login</button>
-      </form>
+          <button type="submit">Login</button>
+        </form>
 
-      <p>
-        Don’t have an account? <Link to="/signup">Signup</Link>
-      </p>
+        <p className="login-footer">
+          Don't have an account? <Link to="/signup">Signup</Link>
+        </p>
+      </div>
     </div>
   );
-};
-
-const styles = {
-  container: { maxWidth: "400px", margin: "80px auto", textAlign: "center" },
-  form: { display: "flex", flexDirection: "column", gap: "10px" },
-  error: { color: "red" },
 };
 
 export default Login;
