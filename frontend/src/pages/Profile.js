@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import "./Profile.css";
 
@@ -19,7 +18,6 @@ const Profile = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
-    const navigate = useNavigate();
 
     useEffect(() => {
         fetchUserProfile();
