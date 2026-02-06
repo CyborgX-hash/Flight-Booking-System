@@ -9,6 +9,7 @@ const Booking = () => {
 
   const [passengers, setPassengers] = useState([{ name: "", age: "" }]);
   const [loading, setLoading] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   /* Promo Code Logic (Moved to top) */
   const [promoCode, setPromoCode] = useState("");
@@ -90,6 +91,13 @@ const Booking = () => {
     const validPassengers = passengers.filter(
       (p) => p.name.trim() && Number(p.age) > 0
     );
+
+    // Authentication Gate
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setShowAuthModal(true);
+      return;
+    }
 
     if (validPassengers.length !== passengers.length) {
       alert("Please enter valid passenger name and age");
@@ -261,7 +269,40 @@ const Booking = () => {
           </div>
         </div>
       </div>
-    </div>
+
+
+      {/* Auth Gate Modal */}
+      {
+        showAuthModal && (
+          <div className="auth-modal-overlay">
+            <div className="auth-modal-card">
+              <h3>Login Required</h3>
+              <p>Please sign in or create an account to finalize your booking.</p>
+              <div className="auth-modal-actions">
+                <button
+                  className="auth-modal-btn login"
+                  onClick={() => navigate("/login")}
+                >
+                  Log In
+                </button>
+                <button
+                  className="auth-modal-btn signup"
+                  onClick={() => navigate("/signup")}
+                >
+                  Create Account
+                </button>
+              </div>
+              <button
+                className="auth-modal-close"
+                onClick={() => setShowAuthModal(false)}
+              >
+                Continue as Guest (Not Allowed)
+              </button>
+            </div>
+          </div>
+        )
+      }
+    </div >
   );
 };
 

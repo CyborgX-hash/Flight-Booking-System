@@ -12,6 +12,7 @@ import Offers from "./pages/Offers";
 
 
 import ProtectedLayout from "./components/ProtectedRoute";
+import PublicLayout from "./components/PublicLayout";
 
 function App() {
   return (
@@ -21,16 +22,19 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
-        {/* Protected routes (with Navbar) */}
-        <Route element={<ProtectedLayout />}>
+        {/* Public Routes with Navbar */}
+        <Route element={<PublicLayout />}>
           <Route path="/" element={<SearchFlights />} />
           <Route path="/results" element={<FlightResults />} />
           <Route path="/booking" element={<Booking />} />
+          <Route path="/offers" element={<Offers />} />
+        </Route>
+
+        {/* Protected Routes (Require Login) */}
+        <Route element={<ProtectedLayout />}>
           <Route path="/bookings" element={<MyBookings />} />
           <Route path="/checkout-success" element={<CheckoutSuccess />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/offers" element={<Offers />} />
-
         </Route>
       </Routes>
     </BrowserRouter>
