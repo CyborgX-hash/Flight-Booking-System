@@ -69,3 +69,58 @@ exports.login = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+exports.getProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.status(200).json(user);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+exports.updateProfile = async (req, res) => {
+  try {
+    const { name, username, city, state, pincode } = req.body;
+    let profilePhoto = req.body.profilePhoto; // For existing photo URL
+
+    // If a new file is uploaded, use its path
+    if (req.file) {
+      // In a real app, you might upload to S3/Cloudinary here.
+      // For local storage:
+      const protocol = req.protocol;
+      const host = req.get("host");
+      profilePhoto = `${protocol}://${host}/uploads/${req.file.filename}`;
+    }
+
+    const updateData = {};
+    if (name) updateData.name = name;
+    if (username) updateData.username = username;
+    if (city) updateData.city = city;
+    if (state) updateData.state = state;
+    if (pincode) updateData.pincode = pincode;
+    if (profilePhoto) updateData.profilePhoto = profilePhoto;
+
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      updateData,
+      { new: true, runValidators: true }
+    ).select("-password");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.status(200).json({
+      message: "Profile updated successfully",
+      user,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};

@@ -19,6 +19,25 @@ const userSchema = new mongoose.Schema(
       required: true,
       minlength: 6,
     },
+    username: {
+      type: String,
+      trim: true,
+    },
+    city: {
+      type: String,
+      trim: true,
+    },
+    state: {
+      type: String,
+      trim: true,
+    },
+    pincode: {
+      type: String,
+      trim: true,
+    },
+    profilePhoto: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

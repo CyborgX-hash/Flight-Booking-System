@@ -27,7 +27,7 @@ const AirportInput = ({ placeholder, onSelect }) => {
   const handleSelect = (airport) => {
     setQuery(`${airport.city} (${airport.code})`);
     setSuggestions([]);
-    onSelect(airport.code); // IMPORTANT
+    onSelect(airport.code); 
   };
 
   return (

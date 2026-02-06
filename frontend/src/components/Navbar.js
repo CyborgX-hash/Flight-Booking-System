@@ -1,26 +1,24 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import ProfileDropdown from "./ProfileDropdown";
 import "./Navbar.css";
 
 const Navbar = () => {
-  const navigate = useNavigate();
-
-  const logout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
-  };
-
   return (
-    <div className="navbar">
-      <h3>FlightBooker</h3>
+    <nav className="navbar-modern">
+      <Link to="/" className="navbar-logo">
+        <h3>FlightBooker</h3>
+      </Link>
 
-      <div>
-        <Link to="/">Search Flights</Link>
-        <Link to="/bookings">My Bookings</Link>
-        <button onClick={logout}>
-          Logout
-        </button>
+      <div className="navbar-links">
+        <Link to="/" className="nav-link">Home</Link>
+        <Link to="/bookings" className="nav-link">My Bookings</Link>
+        <span className="nav-link disabled">Offers</span>
       </div>
-    </div>
+
+      <div className="navbar-actions">
+        <ProfileDropdown />
+      </div>
+    </nav>
   );
 };
 
