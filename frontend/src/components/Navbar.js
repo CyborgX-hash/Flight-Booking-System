@@ -5,27 +5,19 @@ import "./Navbar.css";
 const Navbar = () => {
   return (
     <nav className="navbar-modern">
-      <Link to="/" className="navbar-logo">
-        <h3>AirYatra</h3>
+      <Link to="/search" className="navbar-logo">
+        <h3>FlightBooker</h3>
       </Link>
 
-      <div className="navbar-links">
-        <Link to="/" className="nav-link">Home</Link>
-        <Link to="/bookings" className="nav-link">My Bookings</Link>
-        <Link to="/offers" className="nav-link">Offers</Link>
+      <ProfileDropdown />
+      ) : (
+      <div className="auth-buttons">
+        <Link to="/login" className="nav-btn-login">Log In</Link>
+        <Link to="/signup" className="nav-btn-signup">Sign Up</Link>
       </div>
-
-      <div className="navbar-actions">
-        {localStorage.getItem("token") ? (
-          <ProfileDropdown />
-        ) : (
-          <div className="auth-buttons">
-            <Link to="/login" className="nav-btn-login">Log In</Link>
-            <Link to="/signup" className="nav-btn-signup">Sign Up</Link>
-          </div>
         )}
-      </div>
-    </nav>
+    </div>
+    </nav >
   );
 };
 
