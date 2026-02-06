@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api/axios";
 import "./Auth.css";
@@ -6,7 +6,16 @@ import "./Auth.css";
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  // Redirect if already logged in
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/search");
+    }
+  }, [navigate]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -15,13 +24,21 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
       const res = await api.post("/auth/login", form);
       localStorage.setItem("token", res.data.token);
       navigate("/search");
     } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
+      console.error("Login Error:", err);
+      if (err.code === "ERR_NETWORK") {
+        setError("Network error: Cannot reach the server. Please check your backend connection or REACT_APP_API_URL.");
+      } else {
+        setError(err.response?.data?.message || "Login failed. Please try again.");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -29,11 +46,11 @@ const Login = () => {
     <div className="auth-split-layout">
       {/* Left Side: The Console */}
       <div className="auth-left">
-        <Link to="/" className="auth-logo">FlightBooker</Link>
+        <Link to="/search" className="auth-logo">FlightBooker</Link>
 
         <div className="auth-header">
           <h2>WELCOME <br /><span className="auth-title-accent">BACK</span></h2>
-          <p>Login in to access your curated journeys.</p>
+          <p>Sign in to access your curated journeys.</p>
         </div>
 
         {error && <div className="auth-error">{error}</div>}
@@ -63,7 +80,9 @@ const Login = () => {
             />
           </div>
 
-          <button type="submit" className="auth-btn">Sign In</button>
+          <button type="submit" className="auth-btn" disabled={loading}>
+            {loading ? "Signing In..." : "Sign In"}
+          </button>
         </form>
 
         <p className="auth-footer">

@@ -10,6 +10,7 @@ const Signup = () => {
     password: "",
   });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -19,12 +20,21 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
       await api.post("/auth/signup", form);
-      navigate("/login");
+      // Redirect to root (Login) after signup
+      navigate("/");
     } catch (err) {
-      setError(err.response?.data?.message || "Signup failed");
+      console.error("Signup Error:", err);
+      if (err.code === "ERR_NETWORK") {
+        setError("Network error: Cannot reach the server. Please check your backend connection or REACT_APP_API_URL.");
+      } else {
+        setError(err.response?.data?.message || "Signup failed. Please try again.");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -32,7 +42,7 @@ const Signup = () => {
     <div className="auth-split-layout">
       {/* Left Side: The Console */}
       <div className="auth-left">
-        <Link to="/" className="auth-logo">FlightBooker</Link>
+        <Link to="/search" className="auth-logo">FlightBooker</Link>
 
         <div className="auth-header">
           <h2>START <br /><span className="auth-title-accent">JOURNEY</span></h2>
@@ -78,11 +88,13 @@ const Signup = () => {
             />
           </div>
 
-          <button type="submit" className="auth-btn">Create Account</button>
+          <button type="submit" className="auth-btn" disabled={loading}>
+            {loading ? "Creating Account..." : "Create Account"}
+          </button>
         </form>
 
         <p className="auth-footer">
-          Already a member? <Link to="/login">LogIn</Link>
+          Already a member? <Link to="/">Sign In</Link>
         </p>
       </div>
 
@@ -90,7 +102,7 @@ const Signup = () => {
       <div className="auth-right">
         <div className="auth-image-wrapper">
           <img
-            src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2074&auto=format&fit=crop"
+            src="https://images.unsplash.com/photo-1542296332-2e44a785e755?q=80&w=1888&auto=format&fit=crop"
             alt="Travel adventure"
           />
         </div>
