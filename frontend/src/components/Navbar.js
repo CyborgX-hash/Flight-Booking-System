@@ -9,15 +9,23 @@ const Navbar = () => {
         <h3>FlightBooker</h3>
       </Link>
 
-      <ProfileDropdown />
-      ) : (
-      <div className="auth-buttons">
-        <Link to="/login" className="nav-btn-login">Log In</Link>
-        <Link to="/signup" className="nav-btn-signup">Sign Up</Link>
+      <div className="navbar-links">
+        <Link to="/search" className="nav-link">Home</Link>
+        <Link to="/bookings" className="nav-link">My Bookings</Link>
+        <Link to="/offers" className="nav-link">Offers</Link>
       </div>
+
+      <div className="navbar-actions">
+        {localStorage.getItem("token") ? (
+          <ProfileDropdown />
+        ) : (
+          <div className="auth-buttons">
+            <Link to="/login" className="nav-btn-login">Log In</Link>
+            <Link to="/signup" className="nav-btn-signup">Sign Up</Link>
+          </div>
         )}
-    </div>
-    </nav >
+      </div>
+    </nav>
   );
 };
 

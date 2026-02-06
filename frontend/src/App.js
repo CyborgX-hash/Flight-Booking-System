@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -18,13 +18,15 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Public routes */}
-        <Route path="/login" element={<Login />} />
+        {/* Root is now Login */}
+        <Route path="/" element={<Login />} />
+        {/* Redirect /login to / for consistency, or just keep it */}
+        <Route path="/login" element={<Navigate to="/" replace />} />
         <Route path="/signup" element={<Signup />} />
 
         {/* Public Routes with Navbar */}
         <Route element={<PublicLayout />}>
-          <Route path="/" element={<SearchFlights />} />
+          <Route path="/search" element={<SearchFlights />} />
           <Route path="/results" element={<FlightResults />} />
           <Route path="/booking" element={<Booking />} />
           <Route path="/offers" element={<Offers />} />
