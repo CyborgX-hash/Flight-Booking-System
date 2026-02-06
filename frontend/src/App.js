@@ -8,6 +8,7 @@ import Booking from "./pages/Booking";
 import MyBookings from "./pages/MyBookings";
 import CheckoutSuccess from "./pages/CheckoutSuccess";
 import Profile from "./pages/Profile";
+import Offers from "./pages/Offers";
 
 
 import ProtectedLayout from "./components/ProtectedRoute";
@@ -28,6 +29,7 @@ function App() {
           <Route path="/bookings" element={<MyBookings />} />
           <Route path="/checkout-success" element={<CheckoutSuccess />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/offers" element={<Offers />} />
 
         </Route>
       </Routes>

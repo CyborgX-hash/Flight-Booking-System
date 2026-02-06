@@ -10,6 +10,12 @@ const Booking = () => {
   const [passengers, setPassengers] = useState([{ name: "", age: "" }]);
   const [loading, setLoading] = useState(false);
 
+  /* Promo Code Logic (Moved to top) */
+  const [promoCode, setPromoCode] = useState("");
+  const [discount, setDiscount] = useState(0);
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [promoError, setPromoError] = useState("");
+
   const flight = state?.flight;
 
   if (!flight) {
@@ -38,7 +44,47 @@ const Booking = () => {
     setPassengers(updated);
   };
 
-  const totalPrice = passengers.length * pricePerPassenger;
+  /* Promo Code Logic */
+  /* Promo Code Logic */
+  // Moved to top
+
+  const basePrice = passengers.length * pricePerPassenger;
+  const totalPrice = basePrice - discount;
+
+  const handleApplyPromo = () => {
+    setPromoError("");
+    setDiscount(0);
+
+    if (!promoCode) return;
+
+    if (promoCode === "PAIR20") {
+      if (passengers.length < 2) {
+        setPromoError("This coupon requires at least 2 passengers.");
+        return;
+      }
+      const discValue = basePrice * 0.20;
+      setDiscount(discValue);
+      setAppliedCoupon("PAIR20 (20% OFF)");
+    } else if (promoCode === "FIRST50") {
+      const discValue = basePrice * 0.50;
+      setDiscount(discValue);
+      setAppliedCoupon("FIRST50 (50% OFF)");
+    } else if (promoCode === "SUMMER10") {
+      const discValue = basePrice * 0.10;
+      setDiscount(discValue);
+      setAppliedCoupon("SUMMER10 (10% OFF)");
+    } else if (promoCode === "FAMILY25") {
+      if (passengers.length < 4) {
+        setPromoError("Family pack requires min 4 passengers.");
+        return;
+      }
+      const discValue = basePrice * 0.25;
+      setDiscount(discValue);
+      setAppliedCoupon("FAMILY25 (25% OFF)");
+    } else {
+      setPromoError("Invalid Coupon Code");
+    }
+  };
 
   const handleCheckout = async () => {
     const validPassengers = passengers.filter(
@@ -164,11 +210,41 @@ const Booking = () => {
 
             <div className="summary-divider"></div>
 
+            {/* Promo Code Section */}
+            <div className="promo-section">
+              <div className="promo-input-group">
+                <input
+                  type="text"
+                  placeholder="Promo Code"
+                  value={promoCode}
+                  onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                  disabled={appliedCoupon}
+                />
+                {!appliedCoupon ? (
+                  <button className="apply-btn" onClick={handleApplyPromo}>Apply</button>
+                ) : (
+                  <button className="remove-btn" onClick={() => {
+                    setAppliedCoupon(null);
+                    setDiscount(0);
+                    setPromoCode("");
+                  }}>Remove</button>
+                )}
+              </div>
+              {promoError && <p className="promo-error">{promoError}</p>}
+              {appliedCoupon && <p className="promo-success">Coupon applied: {appliedCoupon}</p>}
+            </div>
+
             <div className="price-breakdown">
               <div className="breakdown-row">
                 <span>Passenger x {passengers.length}</span>
                 <span>₹{pricePerPassenger * passengers.length}</span>
               </div>
+              {discount > 0 && (
+                <div className="breakdown-row discount">
+                  <span>Discount</span>
+                  <span>- ₹{discount}</span>
+                </div>
+              )}
               <div className="breakdown-row total">
                 <span>Total</span>
                 <span>₹{totalPrice}</span>

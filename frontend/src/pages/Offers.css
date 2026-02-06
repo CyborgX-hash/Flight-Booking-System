@@ -1,0 +1,145 @@
+.offers-page-container {
+    min-height: 100vh;
+    padding-top: 100px;
+    /* Navbar space */
+    background: #f8fafc;
+    padding-bottom: 80px;
+}
+
+.offers-hero {
+    text-align: center;
+    margin-bottom: 60px;
+    padding: 0 20px;
+}
+
+.offers-hero h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, var(--primary-black) 0%, var(--accent-purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -2px;
+}
+
+.offers-hero p {
+    font-size: 1.2rem;
+    color: #64748b;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.offers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.offer-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.offer-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+}
+
+.offer-card-header {
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.offer-discount {
+    font-size: 2rem;
+    font-weight: 900;
+    color: white;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    letter-spacing: -1px;
+}
+
+.offer-card-body {
+    padding: 30px;
+}
+
+.offer-card-body h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--primary-black);
+}
+
+.offer-card-body p {
+    color: #64748b;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+}
+
+.offer-meta {
+    margin-bottom: 24px;
+}
+
+.validity-badge {
+    background: #f1f5f9;
+    color: #475569;
+    padding: 6px 12px;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.coupon-action-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    background: #f8fafc;
+    padding: 8px;
+    border-radius: 12px;
+    border: 1px dashed #cbd5e1;
+}
+
+.coupon-code {
+    flex: 1;
+    font-family: 'Courier New', monospace;
+    /* Monospace for code feel */
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-align: center;
+    color: var(--primary-black);
+    letter-spacing: 1px;
+}
+
+.copy-btn {
+    background: var(--primary-black);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.copy-btn:hover {
+    background: var(--accent-purple);
+}
+
+.copy-btn.copied {
+    background: #10b981;
+    /* Success Green */
+}

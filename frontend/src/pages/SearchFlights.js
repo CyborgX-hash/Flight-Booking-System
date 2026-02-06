@@ -188,21 +188,19 @@ const SearchFlights = () => {
             <div className="footer-links-grid">
               <div className="footer-column">
                 <h4>Company</h4>
-                <a href="#">About Us</a>
-                <a href="#">Careers</a>
-                <a href="#">Press</a>
+                <span>About Us</span>
               </div>
               <div className="footer-column">
                 <h4>Support</h4>
-                <a href="#">Help Center</a>
-                <a href="#">Cancellation Options</a>
-                <a href="#">Safety Information</a>
+                <span>Help Center</span>
+                <span>Cancellation Options</span>
+                <span>Safety Information</span>
               </div>
               <div className="footer-column">
                 <h4>Legal</h4>
-                <a href="#">Privacy</a>
-                <a href="#">Terms</a>
-                <a href="#">Sitemap</a>
+                <span>Privacy</span>
+                <span>Terms</span>
+                <span>Sitemap</span>
               </div>
             </div>
           </div>
@@ -210,7 +208,7 @@ const SearchFlights = () => {
           <div className="footer-bottom">
             <div className="watermark-text">FLIGHTBOOKER</div>
             <div className="copyright-row">
-              <span>© 2024 FlightBooker Inc.</span>
+              <span>© 2026 FlightBooker Inc.</span>
               <div className="social-links">
                 <span>Instagram</span>
                 <span>Twitter</span>
