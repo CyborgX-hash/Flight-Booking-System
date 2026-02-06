@@ -24,7 +24,7 @@ function App() {
 
         {/* Public Routes with Navbar */}
         <Route element={<PublicLayout />}>
-          <Route path="/" element={<SearchFlights />} />
+          <Route path="/" element={<Login/>} />
           <Route path="/results" element={<FlightResults />} />
           <Route path="/booking" element={<Booking />} />
           <Route path="/offers" element={<Offers />} />
