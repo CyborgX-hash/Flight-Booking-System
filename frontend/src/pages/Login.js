@@ -9,13 +9,22 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Redirect if already logged in
+  // Check API health on load
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      navigate("/search");
-    }
-  }, [navigate]);
+    console.log("✈️ API Base URL Configured:", api.defaults.baseURL);
+    const checkHealth = async () => {
+      try {
+        await api.get("/health");
+        console.log("🟢 API connection healthy");
+      } catch (err) {
+        console.error("🔴 API connection failed:", err);
+        setError("Warning: Cannot connect to the flight service. Please check if the backend is running.");
+      }
+    };
+    checkHealth();
+  }, []);
+
+  // Redirect if already logged in
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -27,15 +36,17 @@ const Login = () => {
     setLoading(true);
 
     try {
+      console.log("🚀 Sending Login Request:", form.email);
       const res = await api.post("/auth/login", form);
       localStorage.setItem("token", res.data.token);
+      console.log("✅ Login Success, navigating to /search");
       navigate("/search");
     } catch (err) {
-      console.error("Login Error:", err);
+      console.error("❌ Login Error:", err);
       if (err.code === "ERR_NETWORK") {
         setError("Network error: Cannot reach the server. Please check your backend connection or REACT_APP_API_URL.");
       } else {
-        setError(err.response?.data?.message || "Login failed. Please try again.");
+        setError(err.response?.data?.message || err.message || "Login failed. Please try again.");
       }
     } finally {
       setLoading(false);
@@ -62,6 +73,7 @@ const Login = () => {
               className="auth-input"
               type="email"
               name="email"
+              value={form.email}
               placeholder="e.g. pilot@flightbooker.com"
               onChange={handleChange}
               required
@@ -74,6 +86,7 @@ const Login = () => {
               className="auth-input"
               type="password"
               name="password"
+              value={form.password}
               placeholder="••••••••"
               onChange={handleChange}
               required

@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api/axios";
 import "./Auth.css";
 
 const Signup = () => {
+  useEffect(() => {
+    console.log("✈️ API Base URL Configured:", api.defaults.baseURL);
+  }, []);
+
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -23,15 +27,17 @@ const Signup = () => {
     setLoading(true);
 
     try {
+      console.log("🚀 Sending Signup Request:", form.email);
       await api.post("/auth/signup", form);
+      console.log("✅ Signup Success, navigating to /");
       // Redirect to root (Login) after signup
       navigate("/");
     } catch (err) {
-      console.error("Signup Error:", err);
+      console.error("❌ Signup Error:", err);
       if (err.code === "ERR_NETWORK") {
         setError("Network error: Cannot reach the server. Please check your backend connection or REACT_APP_API_URL.");
       } else {
-        setError(err.response?.data?.message || "Signup failed. Please try again.");
+        setError(err.response?.data?.message || err.message || "Signup failed. Please try again.");
       }
     } finally {
       setLoading(false);
@@ -58,6 +64,7 @@ const Signup = () => {
               className="auth-input"
               type="text"
               name="name"
+              value={form.name}
               placeholder="e.g. Amelia Earhart"
               onChange={handleChange}
               required
@@ -70,6 +77,7 @@ const Signup = () => {
               className="auth-input"
               type="email"
               name="email"
+              value={form.email}
               placeholder="e.g. pilot@flightbooker.com"
               onChange={handleChange}
               required
@@ -82,6 +90,7 @@ const Signup = () => {
               className="auth-input"
               type="password"
               name="password"
+              value={form.password}
               placeholder="Create a strong password"
               onChange={handleChange}
               required

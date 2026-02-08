@@ -69,6 +69,13 @@ exports.searchFlights = async (req, res) => {
       error.response?.data || error.message
     );
 
+    const amadeusError = error.response?.data?.errors?.[0];
+    if (amadeusError) {
+      return res.status(error.response.status || 400).json({
+        message: `${amadeusError.title}: ${amadeusError.detail}`,
+      });
+    }
+
     return res.status(502).json({
       message:
         "Flight service temporarily unavailable. Please try again in a moment.",

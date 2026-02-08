@@ -3,15 +3,18 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 exports.signup = async (req, res) => {
+  console.log("📝 Signup attempt:", req.body.email);
   try {
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
+      console.warn("⚠️ Signup failed: Missing fields");
       return res.status(400).json({ message: "All fields are required" });
     }
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
+      console.warn("⚠️ Signup failed: User already exists:", email);
       return res.status(400).json({ message: "User already exists" });
     }
 
@@ -23,30 +26,36 @@ exports.signup = async (req, res) => {
       password: hashedPassword,
     });
 
+    console.log("✅ Signup successful for:", email);
     return res.status(201).json({
       message: "User registered successfully",
       userId: user._id,
     });
   } catch (error) {
+    console.error("❌ Signup Error:", error);
     return res.status(500).json({ message: error.message });
   }
 };
 
 exports.login = async (req, res) => {
+  console.log("🔑 Login attempt:", req.body.email);
   try {
     const { email, password } = req.body;
 
     if (!email || !password) {
+      console.warn("⚠️ Login failed: Missing credentials");
       return res.status(400).json({ message: "All fields are required" });
     }
 
     const user = await User.findOne({ email });
     if (!user) {
+      console.warn("⚠️ Login failed: User not found:", email);
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
+      console.warn("⚠️ Login failed: Incorrect password for:", email);
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
@@ -56,6 +65,7 @@ exports.login = async (req, res) => {
       { expiresIn: "7d" }
     );
 
+    console.log("✅ Login successful for:", email);
     return res.status(200).json({
       message: "Login successful",
       token,
@@ -66,6 +76,7 @@ exports.login = async (req, res) => {
       },
     });
   } catch (error) {
+    console.error("❌ Login Error:", error);
     return res.status(500).json({ message: error.message });
   }
 };

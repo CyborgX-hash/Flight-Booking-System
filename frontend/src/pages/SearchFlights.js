@@ -45,7 +45,9 @@ const SearchFlights = () => {
         state: { flights },
       });
     } catch (err) {
+      console.error("Search Error:", err);
       setError(
+        err.response?.data?.message ||
         "Flight service is temporarily unavailable. Please try again."
       );
     } finally {
@@ -104,6 +106,7 @@ const SearchFlights = () => {
               <input
                 type="date"
                 name="date"
+                min={new Date().toISOString().split("T")[0]}
                 onChange={handleChange}
                 required
               />

@@ -15,6 +15,10 @@ app.get("/", (req, res) => {
   res.send("Flight Booking API is running 🚀");
 });
 
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok", message: "API is healthy" });
+});
+
 app.use("/api/auth", authRoutes);
 app.use("/api/flights", flightRoutes);
 app.use("/api/bookings", bookingRoutes);
