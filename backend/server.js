@@ -6,6 +6,10 @@ const PORT = 5001;
 
 connectDB();
 
+app.get("/test-deploy", (req, res) => {
+  res.send("Deployment Verification: v2.0 (Success!)");
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
