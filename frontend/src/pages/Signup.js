@@ -111,7 +111,7 @@ const Signup = () => {
       <div className="auth-right">
         <div className="auth-image-wrapper">
           <img
-            src="https://images.unsplash.com/photo-1542296332-2e44a785e755?q=80&w=1888&auto=format&fit=crop"
+            src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2074&auto=format&fit=crop"
             alt="Travel adventure"
           />
         </div>

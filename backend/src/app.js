@@ -6,6 +6,7 @@ const flightRoutes = require("./routes/flight.routes");
 const bookingRoutes = require("./routes/booking.routes");
 
 const app = express();
+console.log()
 
 app.use(cors(
   {
