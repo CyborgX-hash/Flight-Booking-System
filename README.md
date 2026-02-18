@@ -1,160 +1,116 @@
-Flight Booking System – Full-Stack Technical Assignment
 
-This project is an end-to-end Flight Booking System built for the XTechon Full-Stack Developer Technical Assignment.
-It demonstrates real-world full-stack development skills including database usage, backend logic, dynamic pricing, wallet handling, and PDF ticket generation using production-ready practices.
+AirYatra is a full-stack flight booking web application built using the **MERN stack**.  
+It allows users to search domestic and international flights in real-time, add passengers, complete bookings securely, and manage their booking history.
 
-📌 Features
-✅ Core Features
+The application integrates the **Amadeus Flight Offers API** to fetch live flight data and demonstrates a complete booking lifecycle from authentication to checkout confirmation.
 
-Database-driven flight search (no static JSON or APIs)
+---
 
-Dynamic surge pricing engine
 
-In-app wallet system
 
-Flight booking with validations
+AirYatra simulates a real-world airline booking experience by implementing:
 
-PDF ticket generation
+- Secure authentication
+- Real-time flight search
+- Passenger management
+- Booking confirmation
+- Persistent booking history
+- Backend validation and database indexing
 
-Booking history page
+This project showcases strong full-stack development skills including API integration, authentication, schema design, and debugging production-level issues.
 
-⭐ Bonus Enhancements
+---
 
-Sorting & filtering flights
 
-Surge pricing indicators
+## 🔐 1. Authentication System
+- User Signup & Login
+- JWT-based authentication
+- Protected routes (only logged-in users can book or view bookings)
+- Token-based authorization middleware
 
-Responsive UI
+---
 
-Authentication (login/register)
+## ✈️ 2. Flight Search (Real-Time Data)
 
-Clean Git commit history
+- Integrated with **Amadeus Flight Offers API**
+- Supports domestic & international flights
+- Airport auto-suggestions (City → IATA Code)
+- Dynamic flight results display:
+  - Airline
+  - Route
+  - Stops
+  - Duration
+  - Price
 
-🏗️ Tech Stack
-Frontend
+---
 
-React / Next.js
+## 👥 3. Passenger Management
 
-TailwindCSS / Bootstrap
+- Add multiple passengers
+- Remove passengers dynamically
+- Frontend validation (Name & Age required)
+- Backend validation (Minimum 1 passenger required)
+- Price auto-calculation based on passenger count
 
-Axios / Fetch API
+---
 
-Backend
+## 🧾 4. Booking System
 
-Node.js
+- Generates unique booking reference
+- Stores:
+  - Flight details
+  - Passenger details
+  - Price & currency
+  - Booking status
+- MongoDB persistence
+- Booking confirmation (Checkout Success page)
 
-Express.js
+---
 
-Database
+## 📂 5. My Bookings Dashboard
 
-MongoDB / PostgreSQL / MySQL
+- Displays all bookings for logged-in user
+- Sorted by latest booking
+- Shows:
+  - Route
+  - Flight numbers
+  - Duration
+  - Total price
+  - Booking reference
+  - Status (CONFIRMED / CANCELLED)
 
-Other Tools
+---
 
-PDF generation (pdfkit / jsPDF)
+## 🧠 Technical Highlights
 
-UUID / NanoID (PNR generation)
+- JWT authentication middleware
+- MongoDB schema validation
+- Unique index for booking reference
+- Passenger array validation
+- Proper API error handling
+- Production-level debugging (MongoDB index conflict resolution)
+- Clean request-response separation (Routes → Controllers → Models)
 
-dotenv for environment variables
+---
 
-📂 Project Structure
-flight-booking-system/
-│
-├── backend/
-│   ├── src/
-│   │   ├── controllers/
-│   │   ├── routes/
-│   │   ├── services/
-│   │   ├── models/
-│   │   ├── utils/
-│   │   └── index.js
-│   ├── seed.js
-│   ├── package.json
-│   └── .env
-│
-├── frontend/
-│   ├── src/
-│   │   ├── pages/
-│   │   ├── components/
-│   │   ├── services/
-│   │   ├── context/
-│   │   └── styles/
-│   └── package.json
-│
-├── README.md
-└── .env.example
+# 🛠️ Tech Stack
 
-🧠 Functional Modules
-1️⃣ Flight Search Module
+## Frontend
+- React (Create React App)
+- React Router
+- Axios
+- Inline CSS styling
 
-Flights are stored in the database
+## Backend
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JWT (Authentication)
 
-10–20 seeded flights
+## Third-Party API
+- Amadeus Flight Offers API
 
-Each flight contains:
+---
 
-flight_id
 
-airline
-
-departure_city
-
-arrival_city
-
-base_price (₹2000–₹3000)
-
-Every search returns 10 flights fetched directly from the database
-
-2️⃣ Dynamic Pricing Engine
-
-If a user tries to book the same flight 3 times within 5 minutes
-
-Flight price increases by 10%
-
-Surge pricing is temporary
-
-After 10 minutes, price resets to the original base_price
-
-3️⃣ Wallet System
-
-Default wallet balance: ₹50,000
-
-Final ticket price is deducted on successful booking
-
-Booking is blocked if wallet balance is insufficient
-
-Clear validation error is shown for low balance
-
-4️⃣ Ticket PDF Generation
-
-A PDF ticket is generated after every successful booking
-
-PDF Includes:
-
-Passenger name
-
-Airline & flight ID
-
-Route (Departure → Arrival)
-
-Final price paid
-
-Booking date & time
-
-Unique PNR
-
-5️⃣ Booking History
-
-Displays all past bookings
-
-Each booking shows:
-
-Flight details
-
-Amount paid
-
-Booking date
-
-PNR
-
-Option to re-download ticket PDF
